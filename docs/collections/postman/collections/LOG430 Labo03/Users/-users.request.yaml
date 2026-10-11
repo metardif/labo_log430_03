@@ -1,0 +1,12 @@
+$kind: http-request
+name: /users
+url: "{{baseURL}}/users"
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "name": "Jane Doe",
+        "email": "jd@example.ca"
+    }
+order: 1000

@@ -1,0 +1,12 @@
+$kind: http-request
+name: /stocks
+url: "{{baseURL}}/stocks"
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "product_id": 1,
+        "quantity": 56
+    }
+order: 1000

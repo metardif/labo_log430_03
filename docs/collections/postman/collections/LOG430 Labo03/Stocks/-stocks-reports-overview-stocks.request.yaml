@@ -1,0 +1,5 @@
+$kind: http-request
+name: /stocks/reports/overview-stocks
+url: "{{baseURL}}/stocks/reports/overview-stocks"
+method: GET
+order: 3000

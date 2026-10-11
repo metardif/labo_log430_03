@@ -27,7 +27,7 @@ def get_stock_for_all_products():
     results = session.query(
         Stock.product_id,
         Stock.quantity,
-    ).all()
+    ).join(Product, Stock.product_id == Product.id).all()
     stock_data = []
     for row in results:
         stock_data.append({

@@ -1,0 +1,9 @@
+$kind: http-request
+name: /stocks/graphql-query
+url: "{{baseURL}}/stocks/graphql-query"
+method: POST
+body:
+  type: graphql
+  content:
+    query: ""
+order: 4000

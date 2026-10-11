@@ -4,6 +4,7 @@ SPDX - License - Identifier: LGPL - 3.0 - or -later
 Auteurs : Gabriel C. Ullmann, Fabio Petrillo, 2025
 """
 from sqlalchemy import text
+from stocks.models.product import Product
 from stocks.models.stock import Stock
 from db import get_redis_conn, get_sqlalchemy_session
 
@@ -67,6 +68,8 @@ def check_in_items_to_stock(session, order_items):
 
 def update_stock_redis(order_items, operation):
     """ Update stock quantities in Redis """
+    session = get_sqlalchemy_session()
+
     if not order_items:
         return
     r = get_redis_conn()
@@ -81,6 +84,8 @@ def update_stock_redis(order_items, operation):
                 product_id = item['product_id']
                 quantity = item['quantity']
             # TODO: ajoutez plus d'information sur l'article
+            product = session.query(Product).filter(Product.id == product_id).first()
+
             current_stock = r.hget(f"stock:{product_id}", "quantity")
             current_stock = int(current_stock) if current_stock else 0
             
@@ -89,7 +94,12 @@ def update_stock_redis(order_items, operation):
             else:  
                 new_quantity = current_stock - quantity
             
-            pipeline.hset(f"stock:{product_id}", "quantity", new_quantity)
+            pipeline.hset(f"stock:{product_id}", mapping ={
+                "quantity" : new_quantity,
+                "name" : product.name,
+                "sku" : product.sku,
+                "price": float(product.price),
+            })
         
         pipeline.execute()
     
